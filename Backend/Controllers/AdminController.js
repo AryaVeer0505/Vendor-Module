@@ -1,6 +1,8 @@
 import productModel from "../Models/ProductModel.js"
 import vendorModel from "../Models/VendorModel.js"
 
+//api for admin login
+
 const adminLogin=async(req,res)=>{
     try {
         const {email,password}=req.body
@@ -26,6 +28,7 @@ const adminLogin=async(req,res)=>{
     }
 }
 
+//api for fetching all products
 
 const allProducts=async(req,res)=>{
     try {
@@ -41,6 +44,8 @@ const allProducts=async(req,res)=>{
         })
     }
 }
+
+//api for fetching all vendors
 
 const allVendors=async(req,res)=>{
     try {

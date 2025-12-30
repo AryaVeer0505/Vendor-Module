@@ -25,8 +25,20 @@ const AppContextProvider=(props)=>{
         }
     }
 
+    const getPendingProducts=async()=>{
+        try {
+             const {data}=await axios.get(`${backendURL}/api/product/pending`,{headers:{token}})
+            if(data.success){
+                setProducts(data.pendingProducts)
+            }
+        } catch (error) {
+             console.log(error)
+           toast.error(error.message) 
+        }
+    }
+
      const vales={
-       token,setToken,backendURL,products,setProducts,getVendorProducts
+       token,setToken,backendURL,products,setProducts,getVendorProducts,getPendingProducts
     }
     return (
         <AppContext.Provider value={vales}>

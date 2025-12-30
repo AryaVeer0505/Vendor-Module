@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const productSchema=new mongoose.Schema({
     name:{
@@ -16,6 +17,10 @@ const productSchema=new mongoose.Schema({
     category:{
         type:String,
         required:true,
+    },
+    image:{
+        type:String,
+        required:true
     },
     vendorId:{
         type:String,

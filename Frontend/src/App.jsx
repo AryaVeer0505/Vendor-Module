@@ -7,7 +7,8 @@ import { ToastContainer } from 'react-toastify'
 import AllProducts from './Pages/AllProducts'
 import AddProducts from './Pages/AddProducts'
 import PendingProducts from './Pages/PendingProducts'
-import ApprovedProducts from './Pages/ApprovedProducts'
+import Profile from './Pages/Profile'
+
 
 const App = () => {
   return (
@@ -19,8 +20,8 @@ const App = () => {
         <Route path='/login' element={<Login/>}/>
         <Route path='/all-products' element={<AllProducts/>}/>
         <Route path='/pending-products' element={<PendingProducts/>}/>
-        <Route path='/approved-products' element={<ApprovedProducts/>}/>
         <Route path='/add-products' element={<AddProducts/>}/>
+        <Route path='/profile' element={<Profile/>}/>
       </Routes>
     </div>
   )

@@ -1,6 +1,55 @@
 import vendorModel from "../Models/VendorModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
+
+//Google Oauth api
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const googleLogin = async (req, res) => {
+  try {
+    const { tokenId } = req.body;
+
+    const ticket = await client.verifyIdToken({
+      idToken: tokenId,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const { name, email } = ticket.getPayload();
+
+    let vendor = await vendorModel.findOne({ email });
+
+    if (!vendor) {
+      vendor = await vendorModel.create({
+        name,
+        email,
+        password: "google_oauth", 
+        phone: 0,
+        oauthProvider: "google",
+      });
+    }
+
+    const token = jwt.sign(
+      { id: vendor._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.status(200).json({
+      success: true,
+      token,
+      message: "Logged in with Google",
+    });
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: "Google authentication failed",
+    });
+  }
+};
+
+//api for vendor register
 
 const register = async (req, res) => {
   try {
@@ -49,6 +98,8 @@ const register = async (req, res) => {
   }
 };
 
+//api for vendor login
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -92,4 +143,23 @@ const login = async (req, res) => {
   }
 };
 
-export {register,login}
+
+//api for fetching vendor profile
+
+const vendorProfile=async(req,res)=>{
+  try {
+    const vendorId = req.vendorId;
+    const profileData=await vendorModel.findById(vendorId).select("-password")
+    res.json({
+      success:true,
+      profileData
+    })
+  } catch (error) {
+     res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+export {register,login,vendorProfile,googleLogin}

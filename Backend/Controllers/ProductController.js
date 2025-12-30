@@ -1,10 +1,11 @@
 import productModel from "../Models/ProductModel.js";
 import { v2 as cloudinary } from "cloudinary";
+
+//api for adding product
 const addProduct = async (req, res) => {
   try {
     const vendorId = req.vendorId;
-     const imageFile=req.file 
-    const { name, description, price, category, image } = req.body;
+    const { name, description, price, category } = req.body;
 
     if (!name || !description || !price || !category) {
       return res.status(400).json({
@@ -13,12 +14,15 @@ const addProduct = async (req, res) => {
       });
     }
 
-    const uploadImage = await cloudinary.uploader.upload(imageFile.path, {
-      resource_type: "image",
-    });
-    const imageURL = uploadImage.secure_url;
+    let imageURL = "";
+    if (req.file) {
+      const uploadImage = await cloudinary.uploader.upload(req.file.path, {
+        folder: "products",
+      });
+      imageURL = uploadImage.secure_url;
+    }
 
-    const productData = {
+    const product = await productModel.create({
       name,
       description,
       price,
@@ -26,13 +30,12 @@ const addProduct = async (req, res) => {
       image: imageURL,
       vendorId,
       status: "pending",
-    };
-    const newProduct = new productModel(productData);
-    await newProduct.save();
+    });
 
     res.status(201).json({
       success: true,
       message: "Product Added",
+      product,
     });
   } catch (error) {
     res.status(500).json({
@@ -42,6 +45,8 @@ const addProduct = async (req, res) => {
   }
 };
 
+
+//APi for fetching vendors products
 
 const vendorProduct=async(req,res)=>{
     try {
@@ -60,11 +65,13 @@ const vendorProduct=async(req,res)=>{
     }
 }
 
+//Api for fetching pending Products
+
 const pendingProducts=async(req,res)=>{
     try {
         const pendingProducts=await productModel.find({status:"pending"})
         res.json({
-            success:false,
+            success:true,
             pendingProducts
         })
     } catch (error) {
@@ -75,6 +82,7 @@ const pendingProducts=async(req,res)=>{
     }
 }
 
+//Api for changing Status
 
 const approveProduct = async (req, res) => {
   try {
