@@ -46,7 +46,7 @@ Run Project Locally---
 Backend--
 
 npm install
-npm run dev
+npm start
 
 
 Frontend--
@@ -54,7 +54,4 @@ Frontend--
 npm install
 npm run dev
 
-Author--
 
-Aryaveer Kanwar
-MERN Stack Developer
