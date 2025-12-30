@@ -67,20 +67,27 @@ const vendorProduct=async(req,res)=>{
 
 //Api for fetching pending Products
 
-const pendingProducts=async(req,res)=>{
-    try {
-        const pendingProducts=await productModel.find({status:"pending"})
-        res.json({
-            success:true,
-            pendingProducts
-        })
-    } catch (error) {
-          res.status(500).json({
+const pendingProducts = async (req, res) => {
+  try {
+    const vendorId = req.vendorId;
+
+    const pendingProducts = await productModel.find({
+      vendorId,
+      status: "pending",
+    });
+
+    res.status(200).json({
+      success: true,
+      pendingProducts,
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
       message: error.message,
     });
-    }
-}
+  }
+};
+
 
 //Api for changing Status
 
