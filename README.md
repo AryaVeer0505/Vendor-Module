@@ -25,6 +25,21 @@ View all products
 View pending products
 Product approval status (Pending / Approved / Rejected)
 
+API Endpoints---
+
+Vendor
+
+POST /api/vendor/sign-up – Vendor registration
+POST /api/vendor/login – Vendor login
+POST /api/vendor/google-login – Google OAuth login
+GET /api/vendor/profile – Get vendor profile
+
+Products
+
+POST /api/product/add – Add new product
+GET /api/product/vendor – Get vendor products
+GET /api/product/pending – Get pending products
+PUT /api/product/approve/:productId – Approve / reject product
 
 Run Project Locally---
 
